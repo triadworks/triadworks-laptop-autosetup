@@ -1,0 +1,27 @@
+---
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: update/upgrade packages
+    apt: update_cache=yes upgrade=yes
+
+  - name: install mysql
+    apt: name=mysql-server state=latest
+
+  - name: ensure mysql is running
+    service: name=mysql enabled=yes state=started
+
+  - name: install jdk
+    apt: name=default-jdk state=latest
+
+  - name: download eclipse
+    get_url: url=http://eclipse.c3sl.ufpr.br/technology/epp/downloads/release/luna/SR1/eclipse-jee-luna-SR1-linux-gtk.tar.gz dest=/root
+
+  - name: extract eclipse
+    command: /bin/tar xzf /root/eclipse-jee-luna-SR1-linux-gtk.tar.gz
+    args:
+      chdir: /opt
+      creates: /opt/eclipse/eclipse
+
+  - name: make eclipse available through CLI
+    file: name=/usr/local/bin/eclipse state=link src=/opt/eclipse/eclipse
