@@ -1,0 +1,11 @@
+# Example playbook for some specific class
+---
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: update/upgrade packages
+    user: name=joop11 state=present password=123
+
+  - command: /usr/bin/touch /home/joop11/test
+    sudo: yes
+    sudo_user: joop11
